@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Horas de Trabalho</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+        input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        input[readonly] {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+        }
+    </style>
+    <script>
+        function calcularSaida() {
+            const entrada1 = document.getElementById('entrada1').value;
+            const saida1 = document.getElementById('saida1').value;
+            const entrada2 = document.getElementById('entrada2').value;
+
+            const totalTrabalhado1 = calcularDiferencaHoras(entrada1, saida1);
+            const necessario = 8 * 60 - totalTrabalhado1;
+            const saida2 = adicionarMinutos(entrada2, necessario);
+
+            document.getElementById('saida2').value = saida2;
+        }
+
+        function calcularDiferencaHoras(inicio, fim) {
+            const [hInicio, mInicio] = inicio.split(':').map(Number);
+            const [hFim, mFim] = fim.split(':').map(Number);
+
+            return ((hFim * 60 + mFim) - (hInicio * 60 + mInicio));
+        }
+
+        function adicionarMinutos(hora, minutos) {
+            const [h, m] = hora.split(':').map(Number);
+            const totalMinutos = h * 60 + m + minutos;
+            const horas = Math.floor(totalMinutos / 60);
+            const minutosRestantes = totalMinutos % 60;
+
+            return `${String(horas).padStart(2, '0')}:${String(minutosRestantes).padStart(2, '0')}`;
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Horas de Trabalho</h1>
+        <form>
+            <label for="entrada1">Hora de Entrada 1:</label>
+            <input type="time" id="entrada1" required><br>
+
+            <label for="saida1">Hora de Saída 1:</label>
+            <input type="time" id="saida1" required><br>
+
+            <label for="entrada2">Hora de Entrada 2:</label>
+            <input type="time" id="entrada2" required><br>
+
+            <button type="button" onclick="calcularSaida()">Calcular Hora de Saída 2</button><br><br>
+
+            <label for="saida2">Hora de Saída 2:</label>
+            <input type="time" id="saida2" readonly><br>
+        </form>
+    </div>
+</body>
+</html>
